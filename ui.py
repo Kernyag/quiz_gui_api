@@ -1,9 +1,11 @@
 THEME_COLOR = "#375362"
 FONT = ("Arial", 20, "italic")
 from tkinter import *
+from quiz_brain import QuizBrain
 
 class GUI():
-    def __init__(self):
+    def __init__(self, quiz_brain: QuizBrain):
+        self.quiz = quiz_brain
         #Window
         self.window = Tk()
         self.window.title = ("QUIZ")
@@ -14,7 +16,7 @@ class GUI():
         #Canvas
         self.canvas = Canvas(width=300, height=250, bg="white")
         self.canvas.grid(row=1, column=0, columnspan=2, pady=50)
-        self.text = self.canvas.create_text(150, 125, text="init", font=FONT)
+        self.text = self.canvas.create_text(150, 125, width=280, text="init", font=FONT)
         #Buttons
         correct_img = PhotoImage(file="images/true.png")
         wrong_img = PhotoImage(file="images/false.png")
@@ -22,7 +24,11 @@ class GUI():
         self.true_but.grid(row=2, column=0)
         self.false_but = Button(image=wrong_img, highlightthickness=0)
         self.false_but.grid(row=2, column=1)
+
+        self.get_next_question()
+
         self.window.mainloop()
 
-    def change_question(self, add_question):
-        self.canvas.itemconfig(self.text, text=add_question)
+    def get_next_question(self):
+        q_text = self.quiz.next_question()
+        self.canvas.itemconfig(self.text, text=q_text)
